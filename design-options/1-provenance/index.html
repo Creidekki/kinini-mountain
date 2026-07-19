@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kinini Mountain Coffee — Provenance &amp; Craft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EFE8D8;
+    --paper:#F7F2E6;
+    --ink:#2B2620;
+    --ink-soft:#5A5348;
+    --rust:#B5472A;
+    --olive:#5B6B3E;
+    --gold:#C99A3B;
+    --line: rgba(43,38,32,0.16);
+    --line-strong: rgba(43,38,32,0.3);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace; letter-spacing:0.04em;}
+  h1,h2,h3,.serif{font-family:'Newsreader', serif;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  .rule{border:none;border-top:1px solid var(--line);}
+  /* NAV */
+  header.site{
+    position:sticky;top:0;z-index:50;
+    background:rgba(239,232,216,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    height:76px;
+  }
+  .brand{
+    font-family:'Newsreader',serif; font-size:22px; font-weight:600;
+    letter-spacing:0.02em;
+  }
+  .brand span{color:var(--rust); font-style:italic;}
+  .nav-links{display:flex; gap:36px; align-items:center; font-size:14.5px;}
+  .nav-links a{text-decoration:none; color:var(--ink-soft); position:relative; padding:4px 0;}
+  .nav-links a:hover{color:var(--ink);}
+  .cta{
+    background:var(--rust); color:#F7F2E6; text-decoration:none;
+    padding:11px 22px; border-radius:2px; font-size:14px; font-weight:500;
+    letter-spacing:0.02em;
+    transition:background 0.2s ease;
+  }
+  .cta:hover{background:#973A21;}
+  .navtoggle{display:none;}
+  /* HERO */
+  .hero{
+    position:relative;
+    padding:96px 0 72px;
+    overflow:hidden;
+    border-bottom:1px solid var(--line-strong);
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0; z-index:0;
+    background-image:
+      repeating-linear-gradient(115deg, transparent 0 46px, rgba(91,107,62,0.06) 46px 48px),
+      repeating-linear-gradient(115deg, transparent 0 46px, rgba(181,71,42,0.05) 96px 98px);
+    pointer-events:none;
+  }
+  .hero .wrap{position:relative; z-index:1;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--rust); margin-bottom:22px; display:flex; gap:14px; align-items:center;
+  }
+  .eyebrow::before{content:""; width:28px; height:1px; background:var(--rust); display:inline-block;}
+  h1.hero-title{
+    font-size:clamp(40px, 6vw, 72px);
+    line-height:1.04;
+    font-weight:500;
+    margin:0 0 28px;
+    max-width:15ch;
+  }
+  h1.hero-title em{font-style:italic; color:var(--rust); font-weight:500;}
+  .hero-sub{
+    font-size:18px; color:var(--ink-soft); max-width:46ch; line-height:1.6; margin:0 0 40px;
+  }
+  .hero-ctas{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:56px;}
+  .btn-outline{
+    border:1px solid var(--ink); text-decoration:none; color:var(--ink);
+    padding:12px 24px; font-size:14.5px; font-weight:500;
+  }
+  .btn-outline:hover{background:var(--ink); color:var(--paper);}
+  .caption-strip{
+    display:flex; gap:0; border-top:1px solid var(--line-strong); padding-top:20px;
+    flex-wrap:wrap;
+  }
+  .caption-strip .cell{
+    flex:1; min-width:180px; padding-right:24px;
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-soft);
+    text-transform:uppercase; letter-spacing:0.06em;
+  }
+  .caption-strip .cell b{display:block; color:var(--ink); font-size:14px; font-family:'IBM Plex Sans',sans-serif; text-transform:none; letter-spacing:0; margin-top:4px; font-weight:600;}
+  /* PHOTO PLACEHOLDER BLOCKS */
+  .photo{
+    background:linear-gradient(135deg,#8C9464 0%, #6E7A48 45%, #4E5A32 100%);
+    position:relative; overflow:hidden; border-radius:2px;
+  }
+  .photo.terracotta{background:linear-gradient(135deg,#C9744F 0%, #B5472A 55%, #8C3319 100%);}
+  .photo.gold{background:linear-gradient(135deg,#DDB765 0%, #C99A3B 55%, #9C7526 100%);}
+  .photo::after{
+    content: attr(data-caption);
+    position:absolute; left:0; right:0; bottom:0;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em;
+    color:rgba(255,255,255,0.92); background:linear-gradient(transparent, rgba(0,0,0,0.35));
+    padding:28px 16px 12px; text-transform:uppercase;
+  }
+  .photo svg{position:absolute; opacity:0.5;}
+  /* DISPATCH SECTIONS */
+  .dispatches{padding:96px 0; border-bottom:1px solid var(--line-strong);}
+  .section-head{max-width:640px; margin-bottom:64px;}
+  .section-head .eyebrow{margin-bottom:16px;}
+  .section-head h2{font-size:clamp(30px,4vw,44px); font-weight:500; margin:0 0 16px; line-height:1.1;}
+  .section-head p{color:var(--ink-soft); font-size:16.5px; line-height:1.65; margin:0;}
+  .dispatch{
+    display:grid; grid-template-columns:64px 1fr 1.1fr; gap:36px;
+    padding:44px 0; border-top:1px solid var(--line);
+    align-items:start;
+  }
+  .dispatch:last-child{border-bottom:1px solid var(--line);}
+  .dispatch .num{
+    font-family:'Newsreader',serif; font-style:italic; font-size:32px; color:var(--rust); font-weight:500;
+  }
+  .dispatch h3{font-size:24px; margin:0 0 12px; font-weight:500;}
+  .dispatch p{margin:0; color:var(--ink-soft); font-size:15.5px; line-height:1.65;}
+  .dispatch .photo{height:200px;}
+  /* MISSION BAND */
+  .mission{
+    background:var(--ink); color:var(--paper); padding:88px 0;
+  }
+  .mission .wrap{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;}
+  .mission blockquote{
+    font-family:'Newsreader',serif; font-style:italic; font-size:clamp(24px,3vw,32px);
+    line-height:1.4; margin:0 0 24px; font-weight:400;
+  }
+  .mission cite{font-style:normal; font-family:'IBM Plex Mono',monospace; font-size:13px; color:#C9BFA8; letter-spacing:0.05em;}
+  .mission .stats{display:grid; grid-template-columns:1fr 1fr; gap:32px;}
+  .stat b{font-family:'Newsreader',serif; font-size:40px; display:block; color:var(--gold); font-weight:500;}
+  .stat span{font-size:13px; color:#C9BFA8; text-transform:uppercase; letter-spacing:0.05em;}
+  /* SHOP SECTION */
+  .shop{padding:100px 0;}
+  .shop-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start;}
+  .product-photo{height:520px;}
+  .price-row{display:flex; align-items:baseline; gap:14px; margin:20px 0 8px;}
+  .price-row .now{font-family:'Newsreader',serif; font-size:36px; font-weight:500;}
+  .price-row .was{text-decoration:line-through; color:var(--ink-soft); font-size:18px;}
+  .tag{
+    display:inline-block; background:rgba(91,107,62,0.14); color:var(--olive);
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.06em;
+    padding:5px 10px; text-transform:uppercase; margin-bottom:16px;
+  }
+  .desc{color:var(--ink-soft); line-height:1.65; margin:16px 0 32px; max-width:52ch;}
+  .toggle-group{
+    display:inline-flex; border:1px solid var(--ink); margin-bottom:28px; border-radius:2px; overflow:hidden;
+  }
+  .toggle-group label{
+    padding:11px 20px; font-size:14px; cursor:pointer; position:relative;
+    font-weight:500;
+  }
+  .toggle-group input{position:absolute; opacity:0; pointer-events:none;}
+  .toggle-group label.active{background:var(--ink); color:var(--paper);}
+  .option-block{margin-bottom:28px;}
+  .option-block > label{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--ink-soft); margin-bottom:10px;
+  }
+  .pill-row{display:flex; gap:10px; flex-wrap:wrap;}
+  .pill{
+    border:1px solid var(--line-strong); padding:9px 16px; font-size:14px; cursor:pointer;
+    border-radius:2px; user-select:none;
+  }
+  .pill.sel{border-color:var(--rust); background:rgba(181,71,42,0.08); color:var(--rust);}
+  .buybar{display:flex; gap:16px; align-items:center; margin-top:8px;}
+  .buybtn{
+    flex:1; background:var(--rust); color:var(--paper); border:none; padding:16px 24px;
+    font-size:15px; font-weight:500; letter-spacing:0.02em; cursor:pointer; border-radius:2px;
+  }
+  .buybtn:hover{background:#973A21;}
+  .subnote{font-size:12.5px; color:var(--ink-soft); margin-top:14px; line-height:1.5;}
+  /* TICKET */
+  .ticket-wrap{margin-top:56px;}
+  .ticket-label{font-family:'IBM Plex Mono',monospace; font-size:11.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); margin-bottom:14px;}
+  .ticket{
+    position:relative; background:var(--paper); border:1px solid var(--line-strong);
+    display:grid; grid-template-columns:1fr 130px;
+  }
+  .ticket::before, .ticket::after{
+    content:""; position:absolute; top:50%; transform:translateY(-50%);
+    width:22px; height:22px; background:var(--bg); border-radius:50%; z-index:2;
+  }
+  .ticket::before{left:calc(100% - 130px - 11px);}
+  .ticket::after{left:calc(100% - 130px - 11px + 130px);  display:none;}
+  .ticket .main{padding:28px 30px;}
+  .ticket .stub{
+    padding:28px 20px; border-left:1px dashed var(--line-strong);
+    display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;
+    background:rgba(201,154,59,0.08);
+  }
+  .ticket .stub b{font-family:'Newsreader',serif; font-style:italic; font-size:20px; color:var(--rust);}
+  .ticket .stub span{font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; color:var(--ink-soft); margin-top:6px;}
+  .ticket-row{display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--line); font-size:13.5px;}
+  .ticket-row:last-child{border-bottom:none;}
+  .ticket-row span:first-child{color:var(--ink-soft); font-family:'IBM Plex Mono',monospace; font-size:11.5px; text-transform:uppercase; letter-spacing:0.04em;}
+  .ticket-row span:last-child{font-weight:500;}
+  /* PLANS TABLE */
+  .plans{padding:100px 0; border-top:1px solid var(--line-strong); background:var(--paper);}
+  .plans-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid var(--line-strong); margin-top:56px;}
+  .plan{padding:40px 32px; border-right:1px solid var(--line-strong);}
+  .plan:last-child{border-right:none;}
+  .plan.featured{background:var(--ink); color:var(--paper);}
+  .plan .plan-name{font-family:'Newsreader',serif; font-style:italic; font-size:22px; margin-bottom:6px;}
+  .plan .plan-price{font-size:34px; font-family:'Newsreader',serif; font-weight:500; margin:18px 0 4px;}
+  .plan .plan-price span{font-size:14px; font-family:'IBM Plex Sans',sans-serif; font-weight:400; color:var(--ink-soft);}
+  .plan.featured .plan-price span{color:#C9BFA8;}
+  .plan ul{list-style:none; padding:0; margin:24px 0 0; font-size:14px; line-height:2.1;}
+  .plan ul li::before{content:"— "; color:var(--rust);}
+  .plan.featured ul li::before{color:var(--gold);}
+  footer{padding:64px 0 40px; border-top:1px solid var(--line-strong);}
+  .foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:48px;}
+  .foot-grid h4{font-family:'IBM Plex Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); margin:0 0 16px;}
+  .foot-grid ul{list-style:none; padding:0; margin:0; font-size:14.5px; line-height:2.3;}
+  .foot-grid ul a{text-decoration:none; color:var(--ink-soft);}
+  .foot-grid ul a:hover{color:var(--ink);}
+  .foot-bottom{display:flex; justify-content:space-between; font-size:12.5px; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace; flex-wrap:wrap; gap:12px;}
+  @media(max-width:860px){
+    .nav-links{display:none;}
+    .mission .wrap, .shop-grid{grid-template-columns:1fr;}
+    .dispatch{grid-template-columns:40px 1fr; }
+    .dispatch .photo{grid-column:1 / -1; order:3;}
+    .plans-grid{grid-template-columns:1fr;}
+    .plan{border-right:none; border-bottom:1px solid var(--line-strong);}
+    .foot-grid{grid-template-columns:1fr 1fr;}
+    .ticket{grid-template-columns:1fr;}
+    .ticket .stub{border-left:none; border-top:1px dashed var(--line-strong);}
+    .ticket::before{display:none;}
+  }
+</style>
+</head>
+<body>
+<header class="site">
+  <nav class="wrap">
+    <div class="brand">Kinini <span>Mountain</span> Coffee</div>
+    <div class="nav-links">
+      <a href="#story">The Story</a>
+      <a href="#shop">Shop</a>
+      <a href="#plans">Subscribe</a>
+      <a href="#footer">Contact</a>
+    </div>
+    <a class="cta" href="#shop">Shop the coffee</a>
+  </nav>
+</header>
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Rulindo District, Rwanda — 1,800–2,500m ASL</div>
+    <h1 class="hero-title">Grown by <em>620 women</em>. Roasted by hand in Eastbourne.</h1>
+    <p class="hero-sub">Kinini is fully washed Rwandan Arabica, grown and graded by the women-led cooperatives of Rusiga and Mbogo, then hand-roasted in small batches by Jacquie — the same person, on both ends of the journey, since 2012.</p>
+    <div class="hero-ctas">
+      <a class="cta" href="#shop">Shop the coffee</a>
+      <a class="btn-outline" href="#story">Read the story</a>
+    </div>
+    <div class="caption-strip">
+      <div class="cell">Origin<b>Rusiga &amp; Mbogo, Rulindo</b></div>
+      <div class="cell">Process<b>Fully washed, hand-sorted</b></div>
+      <div class="cell">Roaster<b>Jacquie, Eastbourne UK</b></div>
+      <div class="cell">Since<b>First planting, 2012</b></div>
+    </div>
+  </div>
+</section>
+<section class="dispatches" id="story">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">The journey</div>
+      <h2>One bag, two hillsides.</h2>
+      <p>Every bag of Kinini makes the same journey — from a terraced hillside in the Northern Province, through a woman-owned washing station, into a roastery on the English south coast. Nothing about that story is invented for marketing; it's simply how the coffee gets to you.</p>
+    </div>
+    <div class="dispatch">
+      <div class="num">01</div>
+      <div>
+        <h3>Grown on the hillside</h3>
+        <p>Mature trees — some planted over a decade ago — are tended, pruned and organically treated by farmers across the Rusiga and Mbogo sectors, with on-the-job agronomy support to keep quality consistent harvest to harvest.</p>
+      </div>
+      <div class="photo" data-caption="Hillside terraces, Rulindo District"></div>
+    </div>
+    <div class="dispatch">
+      <div class="num">02</div>
+      <div>
+        <h3>Washed &amp; hand-graded</h3>
+        <p>Cherries are processed at the Kinini washing station and hand-sorted, bowl by bowl, by the cooperative's women — the same careful grading that earns neighbouring lots Cup of Excellence recognition.</p>
+      </div>
+      <div class="photo terracotta" data-caption="Hand-sorting at the washing station"></div>
+    </div>
+    <div class="dispatch">
+      <div class="num">03</div>
+      <div>
+        <h3>Roasted in Eastbourne</h3>
+        <p>Green beans are shipped directly and roasted in small batches by Jacquie herself, by hand, to order — so what lands on your doorstep was roasted days, not months, before it arrives.</p>
+      </div>
+      <div class="photo gold" data-caption="Jacquie's roastery, Eastbourne"></div>
+    </div>
+  </div>
+</section>
+<section class="mission">
+  <div class="wrap">
+    <div>
+      <blockquote>&ldquo;We built Kinini so the women growing this coffee keep ownership of it, from the hillside to the cup.&rdquo;</blockquote>
+      <cite>— Jacquie, Founder &amp; Roaster</cite>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>620+</b><span>Partner farmers</span></div>
+      <div class="stat"><b>85%</b><span>Of the workforce are women</span></div>
+      <div class="stat"><b>7</b><span>Founding cooperatives</span></div>
+      <div class="stat"><b>2012</b><span>First seedling planted</span></div>
+    </div>
+  </div>
+</section>
+<section class="shop" id="shop">
+  <div class="wrap">
+    <div class="shop-grid">
+      <div class="product-photo photo" data-caption="Rulindo Washed — 250g"></div>
+      <div>
+        <span class="tag">Speciality Grade</span>
+        <h2 class="serif" style="font-size:34px; font-weight:500; margin:0;">Rulindo Washed</h2>
+        <div class="price-row"><span class="now">£11.50</span><span style="color:var(--ink-soft); font-size:14px;">/ 250g bag</span></div>
+        <p class="desc">A bright, fully washed single origin from the Rulindo District — notes of red plum, brown sugar and orange zest. Roasted to order by Jacquie within 48 hours of dispatch.</p>
+        <div class="option-block">
+          <label>Purchase type</label>
+          <div class="toggle-group" id="purchase-toggle">
+            <label class="active" data-val="sub">Subscribe &amp; save 10%</label>
+            <label data-val="one">One-time</label>
+          </div>
+        </div>
+        <div class="option-block" id="freq-block">
+          <label>Delivery frequency</label>
+          <div class="pill-row">
+            <div class="pill" data-freq="2">Every 2 weeks</div>
+            <div class="pill sel" data-freq="4">Every 4 weeks</div>
+            <div class="pill" data-freq="6">Every 6 weeks</div>
+          </div>
+        </div>
+        <div class="option-block">
+          <label>Grind</label>
+          <div class="pill-row">
+            <div class="pill sel" data-grind="beans">Whole bean</div>
+            <div class="pill" data-grind="filter">Filter</div>
+            <div class="pill" data-grind="espresso">Espresso</div>
+          </div>
+        </div>
+        <div class="buybar">
+          <button class="buybtn" id="buybtn">Start subscription — £10.35 / bag</button>
+        </div>
+        <p class="subnote">Pause, change frequency or cancel anytime from your account. Roasted and dispatched by Jacquie in Eastbourne within 48 hours of your order.</p>
+        <div class="ticket-wrap">
+          <div class="ticket-label">Traceability ticket — included with every bag</div>
+          <div class="ticket">
+            <div class="main">
+              <div class="ticket-row"><span>Cooperative</span><span>Rusiga &amp; Mbogo, Rulindo</span></div>
+              <div class="ticket-row"><span>Farmers</span><span>620+, 85% women</span></div>
+              <div class="ticket-row"><span>Process</span><span>Fully washed</span></div>
+              <div class="ticket-row"><span>Roasted by</span><span>Jacquie — Eastbourne, UK</span></div>
+            </div>
+            <div class="stub">
+              <b>Batch<br>№ 0142</b>
+              <span>Roasted this week</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="plans" id="plans">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Subscribe</div>
+      <h2>Fresh coffee, on your schedule.</h2>
+      <p>Every plan is roasted to order, never from a warehouse. Choose how often it arrives — change your mind whenever you like.</p>
+    </div>
+    <div class="plans-grid">
+      <div class="plan">
+        <div class="plan-name">Try it</div>
+        <div class="plan-price">£11.50<span> one-time</span></div>
+        <ul>
+          <li>250g bag, your choice of grind</li>
+          <li>Roasted within 48 hours of order</li>
+          <li>Free UK delivery over £25</li>
+        </ul>
+      </div>
+      <div class="plan featured">
+        <div class="plan-name">Subscribe</div>
+        <div class="plan-price">£10.35<span> per bag</span></div>
+        <ul>
+          <li>Save 10% on every order</li>
+          <li>Delivered every 2, 4 or 6 weeks</li>
+          <li>Pause or cancel anytime</li>
+          <li>Free UK delivery, always</li>
+        </ul>
+      </div>
+      <div class="plan">
+        <div class="plan-name">Two bags</div>
+        <div class="plan-price">£19.50<span> per delivery</span></div>
+        <ul>
+          <li>500g total, mix grinds if you like</li>
+          <li>Best for households of 2+</li>
+          <li>Save 15% vs one-time price</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<footer id="footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:14px;">Kinini <span>Mountain</span> Coffee</div>
+        <p style="color:var(--ink-soft); font-size:14px; max-width:32ch; line-height:1.6;">Speciality Arabica from Rwanda's Rulindo District, hand-roasted in Eastbourne, England.</p>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul><li><a href="#shop">Rulindo Washed</a></li><li><a href="#plans">Subscriptions</a></li><li><a href="#">Gift a bag</a></li></ul>
+      </div>
+      <div>
+        <h4>About</h4>
+        <ul><li><a href="#story">Our story</a></li><li><a href="#">The cooperatives</a></li><li><a href="#">The roastery</a></li></ul>
+      </div>
+      <div>
+        <h4>Follow</h4>
+        <ul><li><a href="#">Instagram</a></li><li><a href="#">TikTok</a></li></ul>
+      </div>
+    </div>
+    <hr class="rule">
+    <div class="foot-bottom" style="padding-top:24px;">
+      <span>© Kinini Mountain Coffee — R &amp; B Import Export Ltd.</span>
+      <span>Design concept 1 of 3 — Provenance &amp; Craft</span>
+    </div>
+  </div>
+</footer>
+<script>
+  const purchaseToggle = document.getElementById('purchase-toggle');
+  const freqBlock = document.getElementById('freq-block');
+  const buybtn = document.getElementById('buybtn');
+  let mode = 'sub';
+  purchaseToggle.addEventListener('click', (e)=>{
+    const label = e.target.closest('label');
+    if(!label) return;
+    [...purchaseToggle.children].forEach(l=>l.classList.remove('active'));
+    label.classList.add('active');
+    mode = label.dataset.val;
+    freqBlock.style.opacity = mode === 'sub' ? '1' : '0.35';
+    freqBlock.style.pointerEvents = mode === 'sub' ? 'auto' : 'none';
+    updatePrice();
+  });
+  document.querySelectorAll('.pill-row').forEach(row=>{
+    row.addEventListener('click', (e)=>{
+      const pill = e.target.closest('.pill');
+      if(!pill) return;
+      [...row.children].forEach(p=>p.classList.remove('sel'));
+      pill.classList.add('sel');
+    });
+  });
+  function updatePrice(){
+    buybtn.textContent = mode === 'sub'
+      ? 'Start subscription — £10.35 / bag'
+      : 'Add to cart — £11.50';
+  }
+</script>
+</body>
+</html>
